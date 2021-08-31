@@ -27,6 +27,11 @@ int main()
     InitGpio();
     InitSysTick();
     
+    // Reset hardware
+    SetPin(RESET_PIN);
+    delay_ms(1);
+    ResetPin(RESET_PIN);
+    
     InitInterrupt();
     InitDma(dma_buf, DMA_NUM_OF_TRANSACTIONS);
     InitTim3();

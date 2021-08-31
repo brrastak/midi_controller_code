@@ -32,6 +32,8 @@
 #define LOCK_PIN            GPIOB, 11   // TIM2, C4
 // Pulse for multiplexer
 #define MUX_PIN             GPIOB, 1    // TIM3, C4
+// Reset input and output counters
+#define RESET_PIN           GPIOB, 0
 
 // DMA read data port
 #define PARALLEL_PORT       GPIOA
