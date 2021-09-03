@@ -8,44 +8,40 @@
 #include "DMA.h"
 #include "main.h"
 #include "timer.h"
-#include "debug_led.h"
+//#include "debug_led.h"
 
 // Using channel 2 of DMA1 with TIM3 DMA request
 
 bool transmitted = true;
 
+// Buffer to return value and flag
+uint8_t* buf_ptr;
+bool* upd_flag_ptr;
+
+// Local buffer
+uint8_t tmp_buf[DMA_NUM_OF_TRANSACTIONS];
 
 // Interrupt handler
 void DMA1_Channel3_IRQHandler()
 {
-    TurnLedOn();
-    //DisableTim3();
     // Clear interrupt flag
     DMA1->IFCR |= DMA_IFCR_CTCIF3;
-        
-    TurnLedOff();
     
+    // Return data
+    for (int i = 0; i < DMA_NUM_OF_TRANSACTIONS; i++)
+        buf_ptr[i] = tmp_buf[i];
+    *upd_flag_ptr = true;
     
-    // Channel 3 transfer complete
-    /*if ((DMA1->ISR & DMA_ISR_TCIF3) != 0) {
-        // Clear interrupt flag
-        DMA1->IFCR |= DMA_IFCR_CTCIF3;
-        
-        // Disable channel
-        //DMA1_Channel3->CCR &= ~DMA_CCR2_EN;
-        
-        DisableTim3();
-        //transmitted = true;
-
-    }*/
-    
-    //TurnLedOff();
 }
-void InitDma(uint8_t * buf, uint32_t num)
+void InitDma(uint8_t * buf, bool* upd_flag)
 {
+    // Return data configuretion
+    buf_ptr = buf;
+    upd_flag_ptr = upd_flag;
+    
     // Channel configuration
     // Peripheral address
-    DMA1_Channel3->CPAR = (uint32_t)&(PARALLEL_PORT->ODR);
+    DMA1_Channel3->CPAR = (uint32_t)&(PARALLEL_PORT->IDR);
     
     DMA1_Channel3->CCR  =   DMA_CCR3_MEM2MEM    * 0 |   // memory to memory mode
                             DMA_CCR3_MSIZE_1    * 0 |   // memory size 00: 8 bit; 01:16; 11:32
@@ -59,31 +55,12 @@ void InitDma(uint8_t * buf, uint32_t num)
                             DMA_CCR3_TCIE       * 1;    // transfer complete interrupt enable
     
     // Memory address
-    DMA1_Channel3->CMAR = (uint32_t)buf;
+    DMA1_Channel3->CMAR = (uint32_t)tmp_buf;
     // Number of transactions
-    DMA1_Channel3->CNDTR = num;
+    DMA1_Channel3->CNDTR = DMA_NUM_OF_TRANSACTIONS;
         
     // Channel enable
     DMA1_Channel3->CCR |= DMA_CCR3_EN;
 }
-// From PARALLEL_PORT to buf
-void TransmitDma(uint8_t * buf, uint32_t num)
-{
-    // Memory address
-    DMA1_Channel3->CMAR = (uint32_t)buf;
-    // Number of transactions
-    DMA1_Channel3->CNDTR = num;
-        
-    // Channel enable
-    DMA1_Channel3->CCR |= DMA_CCR2_EN;
-    
-    transmitted = false;
-}
-void DisableDma(void)
-{
-    DMA1_Channel3->CCR &= ~DMA_CCR3_EN;
-}
-bool TransmittedDma()
-{
-    return transmitted;
-}
+
+

@@ -16,7 +16,17 @@
 
 
 
-uint8_t dma_buf[256];
+volatile uint8_t dma_buf[DMA_NUM_OF_TRANSACTIONS];
+bool data_updated;
+
+
+// Sensor position
+// Power pulse phase 0..5
+#define PHASE_NUM       1
+// Number of register 0..7
+#define REG_NUM         0
+// Number of bit in register
+#define BIT_NUM         1
 
 
 
@@ -28,19 +38,18 @@ int main()
     InitSysTick();
     
     // Reset hardware
+    TurnLedOff();
     SetPin(RESET_PIN);
     delay_ms(1);
     ResetPin(RESET_PIN);
+    delay_ms(1);
     
     InitInterrupt();
-    InitDma(dma_buf, DMA_NUM_OF_TRANSACTIONS);
+    InitDma((uint8_t *)dma_buf, &data_updated);
     InitTim3();
     InitTim2();
     
-    
-    TurnLedOff();
 
-    
     // Time counters
     /*uint32_t temp_cnt;
     uint32_t disp_cnt;
@@ -56,8 +65,13 @@ int main()
     
     while (true) {
         
-        delay_ms(1000);
-        //BlinkLed();
+        TurnLedOff();
+        
+        /*if ((dma_buf[PHASE_NUM*8 + REG_NUM] & (1 << BIT_NUM)) == 0)
+            TurnLedOn();*/
+        
+        if (((dma_buf[16] & (1 << 0)) == 0) && ((dma_buf[16] & (1 << 1)) != 0))
+            TurnLedOn();
         
     }
     

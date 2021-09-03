@@ -21,15 +21,15 @@
 
 // Pulse for multiplexer (settings for TIM3)
 // X * 0.5 us
-#define MUX_PULSE                       2
+#define MUX_PULSE                       4
 // 8 multiplexed outputs should be read
-#define DMA_NUM_OF_TRANSACTIONS         64
+#define DMA_NUM_OF_TRANSACTIONS         48
 
 
 // Pins
 // Pulses power for optical sensors and registers control
 #define UNLOCK_PIN          GPIOB, 10   // TIM2, C3
-#define LOCK_PIN            GPIOB, 11   // TIM2, C4
+#define LOCK_PIN            GPIOB, 11   // TIM2, C4     switch next phase
 // Pulse for multiplexer
 #define MUX_PIN             GPIOB, 1    // TIM3, C4
 // Reset input and output counters

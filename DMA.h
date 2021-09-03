@@ -16,12 +16,8 @@
 
 
 
-void InitDma(uint8_t * buf, uint32_t num);
-// From buf to PARALLEL_PORT
-void TransmitDma(uint8_t * buf, uint32_t num);
-void DisableDma(void);
+void InitDma(uint8_t * buf, bool* upd_flag);
 
-bool TransmittedDma(void);
 
 
 #endif

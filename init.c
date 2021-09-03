@@ -47,7 +47,7 @@ void InitGpio(void)
     // Pulse for multiplexer
     SetGpioMode(MUX_PIN, PIN_MODE_10MHZ_AFPP);
     // Reset input and output counters
-    SetGpioMode(RESET_PIN, PIN_MODE_2MHZ_AFPP);
+    SetGpioMode(RESET_PIN, PIN_MODE_2MHZ_OPP);
 
     // Debug LED
     SetGpioMode(LED_PIN, PIN_MODE_10MHZ_OPP);

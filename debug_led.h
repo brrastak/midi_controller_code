@@ -9,8 +9,7 @@
 #ifndef __DEBUG_LED_H__
 #define __DEBUG_LED_H__
 
-//#define LED_PIN                 GPIOC, 13
-#define LED_PIN                 GPIOA, 9
+#define LED_PIN                 GPIOC, 13
 
 // Onboard LED
 inline void TurnLedOn(void)
