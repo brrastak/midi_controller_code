@@ -73,6 +73,12 @@ int main()
         if (((dma_buf[16] & (1 << 0)) == 0) && ((dma_buf[16] & (1 << 1)) != 0))
             TurnLedOn();
         
+        if (((dma_buf[16] & (1 << 2)) == 0) && ((dma_buf[16] & (1 << 3)) != 0))
+            TurnLedOn();
+        
+        if (((dma_buf[17] & (1 << 0)) == 0) && ((dma_buf[17] & (1 << 1)) != 0))
+            TurnLedOn();
+        
     }
     
 }
