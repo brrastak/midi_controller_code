@@ -13,12 +13,12 @@
 // Using channel 2 of DMA1 with TIM3 DMA request
 
 // Buffer to return value and flag
-uint32_t* buf_ptr;
+uint8_t* buf_ptr;
 // Data ready flag
 static bool data_ready_flag = false;
 
 // Local buffer
-uint32_t tmp_buf[DMA_NUM_OF_TRANSACTIONS];
+uint8_t tmp_buf[DMA_NUM_OF_TRANSACTIONS];
 
 // Interrupt handler
 void DMA1_Channel3_IRQHandler()
@@ -27,8 +27,8 @@ void DMA1_Channel3_IRQHandler()
     DMA1->IFCR |= DMA_IFCR_CTCIF3;
     
     // Return data
-    for (int i = 0; i < DMA_NUM_OF_TRANSACTIONS; i++)
-        buf_ptr[i] = tmp_buf[i];
+    for (int i = 0; i < DMA_NUM_OF_TRANSACTIONS/4; i++)
+        (uint32_t*)buf_ptr[i] = (uint32_t*)tmp_buf[i];
     data_ready_flag = true;
     
 }
@@ -42,8 +42,8 @@ void InitDma(uint8_t * buf)
     DMA1_Channel3->CPAR = (uint32_t)&(PARALLEL_PORT->IDR);
     
     DMA1_Channel3->CCR  =   DMA_CCR3_MEM2MEM    * 0 |   // memory to memory mode
-                            DMA_CCR3_MSIZE_1    * 1 |   // memory size 00: 8 bit; 01:16; 11:32
-                            DMA_CCR3_MSIZE_0    * 1 |   //
+                            DMA_CCR3_MSIZE_1    * 0 |   // memory size 00: 8 bit; 01:16; 11:32
+                            DMA_CCR3_MSIZE_0    * 0 |   //
                             DMA_CCR3_PSIZE_1    * 0 |   // peripheral size 00: 8 bit; 01:16; 10:32
                             DMA_CCR3_PSIZE_0    * 0 |   //
                             DMA_CCR3_MINC       * 1 |   // memory increment mode
