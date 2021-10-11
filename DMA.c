@@ -12,12 +12,10 @@
 
 // Using channel 2 of DMA1 with TIM3 DMA request
 
-bool transmitted = true;
-
 // Buffer to return value and flag
 uint8_t* buf_ptr;
 // Data ready flag
-bool data_ready_flag = false;
+static bool data_ready_flag = false;
 
 // Local buffer
 uint8_t tmp_buf[DMA_NUM_OF_TRANSACTIONS];
