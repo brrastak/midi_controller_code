@@ -16,7 +16,8 @@ bool transmitted = true;
 
 // Buffer to return value and flag
 uint8_t* buf_ptr;
-bool* upd_flag_ptr;
+// Data ready flag
+bool data_ready_flag = false;
 
 // Local buffer
 uint8_t tmp_buf[DMA_NUM_OF_TRANSACTIONS];
@@ -30,14 +31,13 @@ void DMA1_Channel3_IRQHandler()
     // Return data
     for (int i = 0; i < DMA_NUM_OF_TRANSACTIONS; i++)
         buf_ptr[i] = tmp_buf[i];
-    *upd_flag_ptr = true;
+    data_ready_flag = true;
     
 }
-void InitDma(uint8_t * buf, bool* upd_flag)
+void InitDma(uint8_t * buf)
 {
     // Return data configuretion
     buf_ptr = buf;
-    upd_flag_ptr = upd_flag;
     
     // Channel configuration
     // Peripheral address
@@ -61,6 +61,18 @@ void InitDma(uint8_t * buf, bool* upd_flag)
         
     // Channel enable
     DMA1_Channel3->CCR |= DMA_CCR3_EN;
+}
+
+// function to check if data were copyed to the buffer and reset flag
+bool IsDataReady(void)
+{
+    if (data_ready_flag == true) {
+    
+        data_ready_flag = false;
+        return true;
+    }
+    else
+        return false;
 }
 
 
