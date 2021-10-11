@@ -15,9 +15,11 @@
 #define __DMA_H__
 
 
+// buf is a pointer to the buffer to copy received data
+void InitDma(uint8_t * buf);
 
-void InitDma(uint8_t * buf, bool* upd_flag);
-
+// function to check if data were copyed to the buffer and reset flag
+bool IsDataReady(void);
 
 
 #endif
